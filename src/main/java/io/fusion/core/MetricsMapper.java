@@ -15,25 +15,8 @@
 
 package io.fusion.core;
 
-import io.fusion.core.FusionDataServiceConfig.FieldSpec;
-import org.springframework.stereotype.Service;
-
 import java.util.Map;
-import java.util.stream.Collectors;
 
-@Service
-public class MetricsMapper {
-    private final FusionDataServiceConfig fusionDataServiceConfig;
-
-    public MetricsMapper(FusionDataServiceConfig fusionDataServiceConfig) {
-        this.fusionDataServiceConfig = fusionDataServiceConfig;
-    }
-
-    public Map<String, String> mapSourceToTargetMetrics(final String jobId, final Map<String, String> sourceMetrics) {
-        var jobSpec = fusionDataServiceConfig.getJobSpecs().get(jobId);
-
-        return jobSpec.getFields().stream()
-                .filter(fieldSpec -> sourceMetrics.containsKey(fieldSpec.getKey()))
-                .collect(Collectors.toMap(FieldSpec::getTarget, fieldSpec -> sourceMetrics.get(fieldSpec.getKey())));
-    }
+public interface MetricsMapper {
+    Map<String, String> mapSourceToTargetMetrics(final String jobId, final Map<String, String> sourceMetrics);
 }
