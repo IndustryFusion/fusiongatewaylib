@@ -92,4 +92,11 @@ public class JobManager {
             jobs.forEach(future -> future.cancel(true));
         }
     }
+
+    public boolean isDone() {
+        if (jobs != null) {
+            return jobs.stream().map(Future::isDone).reduce(Boolean.TRUE, Boolean::logicalAnd);
+        }
+        return true;
+    }
 }
