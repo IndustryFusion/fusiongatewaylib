@@ -15,8 +15,8 @@
 
 package io.fusion.core.job;
 
-import io.fusion.core.FusionDataServiceConfig;
-import io.fusion.core.FusionDataServiceConfig.DataServiceType;
+import io.fusion.core.config.FusionDataServiceConfig;
+import io.fusion.core.config.FusionDataServiceConfig.DataServiceType;
 import io.fusion.core.mapper.MetricsMapper;
 import io.fusion.core.output.OutputService;
 import io.fusion.core.source.MetricsPullService;

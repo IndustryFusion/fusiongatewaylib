@@ -13,7 +13,7 @@
  * under the License.
  */
 
-package io.fusion.core;
+package io.fusion.core.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

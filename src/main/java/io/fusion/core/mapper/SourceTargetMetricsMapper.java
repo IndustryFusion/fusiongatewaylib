@@ -15,8 +15,8 @@
 
 package io.fusion.core.mapper;
 
-import io.fusion.core.FusionDataServiceConfig;
-import io.fusion.core.FusionDataServiceConfig.FieldSpec;
+import io.fusion.core.config.FusionDataServiceConfig;
+import io.fusion.core.config.FusionDataServiceConfig.FieldSpec;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
