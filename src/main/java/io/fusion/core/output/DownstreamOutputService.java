@@ -13,8 +13,9 @@
  * under the License.
  */
 
-package io.fusion.core;
+package io.fusion.core.output;
 
+import io.fusion.core.FusionDataServiceConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

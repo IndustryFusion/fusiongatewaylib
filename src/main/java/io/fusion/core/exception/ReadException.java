@@ -13,10 +13,11 @@
  * under the License.
  */
 
-package io.fusion.core;
+package io.fusion.core.exception;
 
-import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-public interface MetricsMapper {
-    Map<String, String> mapSourceToTargetMetrics(final String jobId, final Map<String, String> sourceMetrics);
+@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR, reason = "JOB_EXECUTION")
+public class ReadException extends RuntimeException {
 }

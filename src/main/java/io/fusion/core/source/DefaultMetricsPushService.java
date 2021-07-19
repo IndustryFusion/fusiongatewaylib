@@ -13,10 +13,14 @@
  * under the License.
  */
 
-package io.fusion.core;
+package io.fusion.core.source;
 
-import java.util.Map;
+import org.springframework.stereotype.Service;
 
-public interface MetricsPullService {
-    Map<String, String> getMetrics(final String jobId);
+@Service
+public class DefaultMetricsPushService implements MetricsPushService {
+    @Override
+    public void start(String jobId, PushCallback pushCallback) {
+        throw new IllegalStateException("Implement MetricsPushService and set @Primary ");
+    }
 }

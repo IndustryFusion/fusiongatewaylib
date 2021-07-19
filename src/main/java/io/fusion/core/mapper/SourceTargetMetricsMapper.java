@@ -13,8 +13,9 @@
  * under the License.
  */
 
-package io.fusion.core;
+package io.fusion.core.mapper;
 
+import io.fusion.core.FusionDataServiceConfig;
 import io.fusion.core.FusionDataServiceConfig.FieldSpec;
 import org.springframework.stereotype.Service;
 

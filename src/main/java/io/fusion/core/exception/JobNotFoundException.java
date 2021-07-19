@@ -13,16 +13,11 @@
  * under the License.
  */
 
-package io.fusion.core;
+package io.fusion.core.exception;
 
-import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.Map;
-
-@Service
-public class DefaultMetricsPullService implements MetricsPullService {
-    @Override
-    public Map<String, String> getMetrics(String jobId) {
-        throw new IllegalStateException("Implement MetricsPullService and set @Primary ");
-    }
+@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "JOB")
+public class JobNotFoundException extends RuntimeException {
 }

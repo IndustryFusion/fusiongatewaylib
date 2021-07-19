@@ -13,30 +13,37 @@
  * under the License.
  */
 
-package io.fusion.core;
+package io.fusion.core.job;
+
+import io.fusion.core.mapper.MetricsMapper;
+import io.fusion.core.output.OutputService;
+import io.fusion.core.source.MetricsPushService;
+import io.fusion.core.source.PushCallback;
 
 import java.util.Map;
 
-public class PullMetricsAndOutputJob implements Runnable {
+public class PushMetricsAndOutputJob implements Runnable, PushCallback {
     private final String jobId;
-    private final MetricsPullService metricsPullService;
+    private final MetricsPushService metricsPushService;
     private final OutputService outputService;
     private final MetricsMapper metricsMapper;
 
-    public PullMetricsAndOutputJob(String jobId,
-                                   MetricsPullService metricsPullService,
-                                   OutputService outputService,
+    public PushMetricsAndOutputJob(String jobId, MetricsPushService metricsPushService, OutputService outputService,
                                    MetricsMapper metricsMapper) {
         this.jobId = jobId;
-        this.metricsPullService = metricsPullService;
+        this.metricsPushService = metricsPushService;
         this.outputService = outputService;
         this.metricsMapper = metricsMapper;
     }
 
     @Override
     public void run() {
-        Map<String, String> sourceMetrics = metricsPullService.getMetrics(jobId);
-        Map<String, String> targetMetrics = metricsMapper.mapSourceToTargetMetrics(jobId, sourceMetrics);
+        this.metricsPushService.start(jobId, this);
+    }
+
+    @Override
+    public void handleMetrics(String jobId, Map<String, String> metrics) {
+        Map<String, String> targetMetrics = metricsMapper.mapSourceToTargetMetrics(jobId, metrics);
 
         outputService.sendMetrics(jobId, targetMetrics);
     }
