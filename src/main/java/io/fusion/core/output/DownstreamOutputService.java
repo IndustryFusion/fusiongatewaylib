@@ -33,7 +33,7 @@ public class DownstreamOutputService implements OutputService {
     }
 
     private static String ensureTrailingSlash(final String url) {
-        if (!url.substring(url.length() - 1).equals("/")) {
+        if (!url.endsWith("/")) {
             return url + "/";
         }
         return url;
