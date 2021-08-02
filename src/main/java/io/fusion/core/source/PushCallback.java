@@ -18,5 +18,5 @@ package io.fusion.core.source;
 import java.util.Map;
 
 public interface PushCallback {
-    void handleMetrics(final String jobId, final Map<String, String> metrics);
+    void handleMetrics(final String jobId, final Map<String, Object> metrics);
 }

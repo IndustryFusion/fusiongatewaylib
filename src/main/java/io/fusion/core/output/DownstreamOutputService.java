@@ -40,7 +40,7 @@ public class DownstreamOutputService implements OutputService {
     }
 
     @Override
-    public void sendMetrics(final String jobId, Map<String, String> metrics) {
+    public void sendMetrics(final String jobId, Map<String, Object> metrics) {
         var restTemplate = new RestTemplate();
         var url = getRestServiceUrl(jobId);
         ResponseEntity<String> response = restTemplate.postForEntity(url, metrics, String.class);

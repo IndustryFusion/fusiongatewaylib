@@ -18,5 +18,5 @@ package io.fusion.core.source;
 import java.util.Map;
 
 public interface MetricsPullService {
-    Map<String, String> getMetrics(final String jobId);
+    Map<String, Object> getMetrics(final String jobId);
 }

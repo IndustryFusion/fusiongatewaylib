@@ -18,5 +18,5 @@ package io.fusion.core.output;
 import java.util.Map;
 
 public interface OutputService {
-    void sendMetrics(final String jobId, final Map<String, String> metrics);
+    void sendMetrics(final String jobId, final Map<String, Object> metrics);
 }

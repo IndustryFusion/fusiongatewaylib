@@ -22,7 +22,7 @@ import java.util.Map;
 @Service
 public class DefaultMetricsPullService implements MetricsPullService {
     @Override
-    public Map<String, String> getMetrics(String jobId) {
+    public Map<String, Object> getMetrics(String jobId) {
         throw new IllegalStateException("Implement MetricsPullService and set @Primary ");
     }
 }

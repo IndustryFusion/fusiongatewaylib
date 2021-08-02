@@ -42,8 +42,8 @@ public class PushMetricsAndOutputJob implements Runnable, PushCallback {
     }
 
     @Override
-    public void handleMetrics(String jobId, Map<String, String> metrics) {
-        Map<String, String> targetMetrics = metricsMapper.mapSourceToTargetMetrics(jobId, metrics);
+    public void handleMetrics(String jobId, Map<String, Object> metrics) {
+        Map<String, Object> targetMetrics = metricsMapper.mapSourceToTargetMetrics(jobId, metrics);
 
         outputService.sendMetrics(jobId, targetMetrics);
     }

@@ -30,7 +30,7 @@ public class SourceTargetMetricsMapper implements MetricsMapper {
         this.fusionDataServiceConfig = fusionDataServiceConfig;
     }
 
-    public Map<String, String> mapSourceToTargetMetrics(final String jobId, final Map<String, String> sourceMetrics) {
+    public Map<String, Object> mapSourceToTargetMetrics(final String jobId, final Map<String, Object> sourceMetrics) {
         var jobSpec = fusionDataServiceConfig.getJobSpecs().get(jobId);
 
         return jobSpec.getFields().stream()

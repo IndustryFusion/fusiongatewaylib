@@ -39,8 +39,8 @@ public class PullMetricsAndOutputJob implements Runnable {
 
     @Override
     public void run() {
-        Map<String, String> sourceMetrics = metricsPullService.getMetrics(jobId);
-        Map<String, String> targetMetrics = metricsMapper.mapSourceToTargetMetrics(jobId, sourceMetrics);
+        Map<String, Object> sourceMetrics = metricsPullService.getMetrics(jobId);
+        Map<String, Object> targetMetrics = metricsMapper.mapSourceToTargetMetrics(jobId, sourceMetrics);
 
         outputService.sendMetrics(jobId, targetMetrics);
     }

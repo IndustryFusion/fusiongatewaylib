@@ -18,5 +18,5 @@ package io.fusion.core.mapper;
 import java.util.Map;
 
 public interface MetricsMapper {
-    Map<String, String> mapSourceToTargetMetrics(final String jobId, final Map<String, String> sourceMetrics);
+    Map<String, Object> mapSourceToTargetMetrics(final String jobId, final Map<String, Object> sourceMetrics);
 }
