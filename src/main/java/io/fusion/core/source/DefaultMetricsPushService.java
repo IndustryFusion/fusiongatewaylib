@@ -21,6 +21,11 @@ import org.springframework.stereotype.Service;
 public class DefaultMetricsPushService implements MetricsPushService {
     @Override
     public void start(String jobId, PushCallback pushCallback) {
-        throw new IllegalStateException("Implement MetricsPushService and set @Primary ");
+        throw new IllegalStateException("Implement MetricsPushService and set @Primary");
+    }
+
+    @Override
+    public void stop(String jobId) {
+        throw new IllegalStateException("Implement MetricsPushService and set @Primary");
     }
 }

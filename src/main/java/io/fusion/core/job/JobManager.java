@@ -24,7 +24,6 @@ import io.fusion.core.source.MetricsPushService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
@@ -36,20 +35,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JobManager {
     private final ThreadPoolTaskScheduler taskScheduler;
-    private final ThreadPoolTaskExecutor taskExecutor;
     private final FusionDataServiceConfig config;
     private final MetricsMapper metricsMapper;
     private final MetricsPullService metricsPullService;
     private final MetricsPushService metricsPushService;
     private final OutputService outputService;
-    private List<Future<?>> jobs;
+    private List<Future<?>> pullJobs;
+    private List<PushMetricsAndOutputJob> pushJobs;
 
-    public JobManager(ThreadPoolTaskScheduler taskScheduler, ThreadPoolTaskExecutor taskExecutor,
-                      FusionDataServiceConfig config, MetricsMapper metricsMapper,
-                      MetricsPullService metricsPullService, MetricsPushService metricsPushService,
-                      OutputService outputService) {
+    public JobManager(ThreadPoolTaskScheduler taskScheduler, FusionDataServiceConfig config,
+                      MetricsMapper metricsMapper, MetricsPullService metricsPullService,
+                      MetricsPushService metricsPushService, OutputService outputService) {
         this.taskScheduler = taskScheduler;
-        this.taskExecutor = taskExecutor;
         this.config = config;
         this.metricsPullService = metricsPullService;
         this.metricsMapper = metricsMapper;
@@ -66,8 +63,8 @@ public class JobManager {
 
     public void start() {
         log.info("Starting JobManager");
-        if (config.getDataServiceType().equals(DataServiceType.PULL)) {
-            jobs = config.getJobSpecs().entrySet().stream()
+        if (config.getDataServiceType() != null && config.getDataServiceType().equals(DataServiceType.PULL)) {
+            pullJobs = config.getJobSpecs().entrySet().stream()
                     .map(mapEntry -> taskScheduler.scheduleWithFixedDelay(
                             new PullMetricsAndOutputJob(mapEntry.getKey(),
                                     metricsPullService,
@@ -76,26 +73,29 @@ public class JobManager {
                             mapEntry.getValue().getPeriod()))
                     .collect(Collectors.toList());
         }
-        if (config.getDataServiceType().equals(DataServiceType.PUSH)) {
-            jobs = config.getJobSpecs().keySet().stream()
-                    .map(jobId -> taskExecutor.submit(
-                            new PushMetricsAndOutputJob(jobId,
+        if (config.getDataServiceType() != null && config.getDataServiceType().equals(DataServiceType.PUSH)) {
+            pushJobs = config.getJobSpecs().keySet().stream()
+                    .map(jobId -> new PushMetricsAndOutputJob(jobId,
                                     metricsPushService,
                                     outputService,
-                                    metricsMapper)))
+                                    metricsMapper))
                     .collect(Collectors.toList());
+            pushJobs.forEach(PushMetricsAndOutputJob::start);
         }
     }
 
     public void cancel() {
-        if (jobs != null) {
-            jobs.forEach(future -> future.cancel(true));
+        if (pullJobs != null) {
+            pullJobs.forEach(future -> future.cancel(true));
+        }
+        if (pushJobs != null) {
+            pushJobs.forEach(PushMetricsAndOutputJob::stop);
         }
     }
 
     public boolean isDone() {
-        if (jobs != null) {
-            return jobs.stream().map(Future::isDone).reduce(Boolean.TRUE, Boolean::logicalAnd);
+        if (pullJobs != null) {
+            return pullJobs.stream().map(Future::isDone).reduce(Boolean.TRUE, Boolean::logicalAnd);
         }
         return true;
     }

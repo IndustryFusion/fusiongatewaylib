@@ -22,7 +22,7 @@ import io.fusion.core.source.PushCallback;
 
 import java.util.Map;
 
-public class PushMetricsAndOutputJob implements Runnable, PushCallback {
+public class PushMetricsAndOutputJob implements PushCallback {
     private final String jobId;
     private final MetricsPushService metricsPushService;
     private final OutputService outputService;
@@ -36,9 +36,12 @@ public class PushMetricsAndOutputJob implements Runnable, PushCallback {
         this.metricsMapper = metricsMapper;
     }
 
-    @Override
-    public void run() {
+    public void start() {
         this.metricsPushService.start(jobId, this);
+    }
+
+    public void stop() {
+        this.metricsPushService.stop(jobId);
     }
 
     @Override

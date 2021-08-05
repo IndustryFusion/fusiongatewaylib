@@ -17,12 +17,14 @@ package io.fusion.core.mapper;
 
 import io.fusion.core.config.FusionDataServiceConfig;
 import io.fusion.core.config.FusionDataServiceConfig.FieldSpec;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class SourceTargetMetricsMapper implements MetricsMapper {
     private final FusionDataServiceConfig fusionDataServiceConfig;
 
@@ -32,6 +34,10 @@ public class SourceTargetMetricsMapper implements MetricsMapper {
 
     public Map<String, Object> mapSourceToTargetMetrics(final String jobId, final Map<String, Object> sourceMetrics) {
         var jobSpec = fusionDataServiceConfig.getJobSpecs().get(jobId);
+        if (jobSpec == null) {
+            log.warn("No job with id {} found!", jobId);
+            return null;
+        }
 
         return jobSpec.getFields().stream()
                 .filter(fieldSpec -> sourceMetrics.containsKey(fieldSpec.getKey()))

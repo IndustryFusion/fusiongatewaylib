@@ -17,4 +17,6 @@ package io.fusion.core.source;
 
 public interface MetricsPushService {
     void start(final String jobId, final PushCallback pushCallback);
+
+    void stop(final String jobId);
 }
